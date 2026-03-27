@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Refleks Oyunu</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            background: #111;
+            color: white;
+        }
+
+        #gameArea {
+            width: 400px;
+            height: 400px;
+            margin: 20px auto;
+            background: #222;
+            position: relative;
+            border-radius: 10px;
+        }
+
+        #target {
+            width: 40px;
+            height: 40px;
+            background: red;
+            border-radius: 50%;
+            position: absolute;
+            display: none;
+            cursor: pointer;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎯 Refleks Oyunu</h1>
+    <p>Süre: <span id="time">30</span> saniye</p>
+    <p>Skor: <span id="score">0</span></p>
+
+    <button onclick="startGame()">Oyunu Başlat</button>
+
+    <div id="gameArea">
+        <div id="target"></div>
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        let gameInterval;
+        let countdown;
+        const target = document.getElementById("target");
+        const gameArea = document.getElementById("gameArea");
+
+        function randomPosition() {
+            const x = Math.random() * (gameArea.clientWidth - 40);
+            const y = Math.random() * (gameArea.clientHeight - 40);
+            target.style.left = x + "px";
+            target.style.top = y + "px";
+        }
+
+        function showTarget() {
+            randomPosition();
+            target.style.display = "block";
+        }
+
+        target.onclick = function () {
+            score++;
+            document.getElementById("score").innerText = score;
+            showTarget();
+        };
+
+        function startGame() {
+            score = 0;
+            timeLeft = 30;
+            document.getElementById("score").innerText = score;
+            document.getElementById("time").innerText = timeLeft;
+
+            showTarget();
+
+            gameInterval = setInterval(showTarget, 800);
+
+            countdown = setInterval(() => {
+                timeLeft--;
+                document.getElementById("time").innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(gameInterval);
+                    clearInterval(countdown);
+                    target.style.display = "none";
+                    alert("Oyun bitti! Skorun: " + score);
+                }
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>
